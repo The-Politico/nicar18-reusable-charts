@@ -1,4 +1,8 @@
-body {
-  background-color: black;
-  color: white;
+$lineChart-container: '#chart';
+
+#{$lineChart-container} {
+  border: 1px dashed red;
+  width: 50%;
+  min-width: 290px;
+  height:400px;
 }

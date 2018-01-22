@@ -1,4 +1,7 @@
 import '../scss/app.scss';
 
-const newVar = 'new var';
-const secondVar = 'second var';
+// import our chart module in our app js
+// make it a global variable and attach it to the window
+import chart from './chart';
+
+window.lineChart = chart;

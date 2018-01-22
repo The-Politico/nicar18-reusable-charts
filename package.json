@@ -7,11 +7,18 @@
     "build": "parcel build src/index.html --public-url ./ --out-dir dist"
   },
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "d3": "^4.12.2"
+  },
   "devDependencies": {
-    "babel-eslint": "^8.0.3",
+    "babel-eslint": "^8.0.1",
     "babel-preset-env": "^1.6.1",
+    "eslint": "^4.9.0",
     "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-es6-recommended": "^0.1.2",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jsx-a11y": "^6.0.2",
+    "eslint-plugin-react": "^7.4.0",
     "node-sass": "^4.7.2",
     "parcel-bundler": "*"
   }
