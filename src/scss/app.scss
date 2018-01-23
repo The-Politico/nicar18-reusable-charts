@@ -1,8 +1,14 @@
 $lineChart-container: '#chart';
 
 #{$lineChart-container} {
-  border: 1px dashed red;
-  width: 50%;
-  min-width: 290px;
-  height:400px;
+  width: 100%;
+  max-width:600px;
+  height: 400px;
+  @media screen and (max-width: 450px) {
+      height:250px;
+  }
+  path {
+    fill: none;
+    stroke: #000;
+  }
 }
