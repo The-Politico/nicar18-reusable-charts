@@ -40,13 +40,6 @@ export default () => ({
 
         const parseDate = d3.timeParse('%Y');
 
-        const parseData = o => ({
-          x: parseDate(o.year),
-          y: +o.value,
-        });
-
-        const parsedData = _.map(data, parseData);
-
         const xScale = props.xScale
           .domain([parseDate('2011'), parseDate('2017')])
           .range([0, innerWidth]);
@@ -74,7 +67,7 @@ export default () => ({
           .attr('transform', `translate(${props.margins.left}, ${props.margins.top})`);
 
         const lines = g.selectAll('path.line')
-          .data([parsedData]);
+          .data([data]);
 
         lines.enter()
           .append('path')
@@ -90,7 +83,7 @@ export default () => ({
     chart.props = (obj) => {
       if (!obj) return props;
       props = Object.assign(props, obj);
-      console.log(props);
+      // console.log(props);
       return chart;
     };
     // Here's where we return our chart function
