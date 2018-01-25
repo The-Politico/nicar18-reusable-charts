@@ -28,6 +28,7 @@ export default () => ({
       yExtent: null,
       yTickFormat: null,
       yTickSteps: null,
+      colorScale: d3.scaleOrdinal(),
     };
 
     function chart(selection) {
@@ -49,6 +50,8 @@ export default () => ({
         const xExtent = d3.extent(data, d => d.x);
         const yExtent = d3.extent(data, d => d.y);
 
+        // console.log(data);
+
         // If an extent is not provided as a prop, default to the min/max of our data
         const xScale = props.xScale
           .domain(props.xExtent === null ? xExtent : props.xExtent)
@@ -58,6 +61,10 @@ export default () => ({
           .domain(props.yExtent === null ? yExtent : props.yExtent)
           .range([innerHeight, 0])
           .nice();
+
+        const colorScale = props.colorScale
+          .domain(data.map(c => c.z))
+          .range(d3.schemeCategory10);
 
         // Axes
         const xAxis = d3.axisBottom(xScale)
@@ -97,16 +104,16 @@ export default () => ({
           .attr('transform', `translate(0,${innerHeight})`)
           .call(xAxis);
 
-
         // Add our lines data
         const lines = g.selectAll('path.line')
-          .data([data]);
+          .data(data);
 
         lines.enter()
           .append('path')
           .attr('class', 'line')
           .merge(lines)
-          .attr('d', line);
+          .attr('d', line)
+          .style('stroke', d => colorScale(d.z));
       });
     }
 
@@ -128,8 +135,6 @@ export default () => ({
   draw() {
     const chart = this.render()
       .props(this._props);
-
-    console.log(this._props);
 
     d3.select(this._selection)
       .datum(this._data)

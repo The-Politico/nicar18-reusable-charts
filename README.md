@@ -37,14 +37,10 @@ How do you demonstrate reusability?
 
 
 #TODO
-- bring in a different axis.
 - bring in multiple lines
-- break up code ...
+- break up code ... [building chart - render a line, props, putting it all together]
 
 Lecture Notes:
-### A basic d3 line chart we've all built ... too many times to count.
-- [ ] NEED FILE
-
 ### Introducing idempotence and our friend `appendSelect`
 #### file: `d3.js`
 Ok, let's get oriented and walk through some of the files in our project.
@@ -70,7 +66,11 @@ Understanding what `appendSelect` does is fundamental to understanding how reusa
 
 ### The basic structure of our chart module
 #### file: `file-1.js`
-Ok, now that we've covered the key concepts behind our appendSelect method, let's go over the basic structure of our chart module (`file-1.js`). First of all, our chart is wrapped in an `export default()` function so we can easily import it into other projects.
+Ok, now that we've covered the key concepts behind our appendSelect method, let's go over the basic structure of our chart module (`file-1.js`).
+
+At the top of the file you'll see where we import our custom `d3.js`. This is where we would call all other TK needed in this script.
+
+ First of all, our chart is wrapped in an `export default()` function so we can easily import it into other projects.
 
 Second, our chart has 5 methods by which you can access it/call it.
 1. `render()`
