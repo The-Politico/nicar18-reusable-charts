@@ -28,18 +28,28 @@ How do you demonstrate reusability?
 - Call update function
 - Small multiples
 
+- internalize where the logic goes
+- do you expect normalized x/y properties
+- what about accessors for accessing data and passing it in
+
+- concept of idempotence ... we make them so you can call them anytime, anywhere.
+- predictable
+
+
 #TODO
 - bring in a different axis.
 - bring in multiple lines
 - break up code ...
 
 Lecture Notes:
-## A basic d3 line chart we've all built ... too many times to count.
+### A basic d3 line chart we've all built ... too many times to count.
+- [ ] NEED FILE
 
-## Introducing our friend `appendSelect`
-Let's walk through some of the files in our project.
+### Introducing idempotence and our friend `appendSelect`
+#### file: `d3.js`
+Ok, let's get oriented and walk through some of the files in our project.
 
-First things first, you'll notice even though d3 is installed in our project (see `node_modules` folder and `package.json`) we still have a `d3.js` file in the root of our js folder. And that's because we use a version of d3 in our chart modules where we've created custom methods we can call to make our lives easier. Our d3 methods `moveToFront` and `moveToBack` are useful for tooltip events, but today we're going to focus on our bread and butter method `appendSelect`.
+First things first, you'll notice even though d3 is installed in our project (see `node_modules` folder and `package.json`) we still have a `d3.js` file in the root of our js folder. Let's go ahead and open it. You'll see we're using a version of d3 in our chart modules where we've created custom methods we can call to make our lives easier. Our d3 methods `moveToFront` and `moveToBack` are useful for tooltip events, but today we're going to focus on our bread and butter method `appendSelect`.
 
 What this method does is checks to see if an element already exists. If the element doesn't exist, the element is appended (with a class). But if the element already exists, it will not be appended again — instead the first existing element that matches the given selector will be returned.
 
@@ -53,13 +63,14 @@ Instead of this ...
   d3.select('#chart').append('svg').attr('class', 'chart') :
   d3.select('#chart').select('svg.chart');`
 
-`appendSelect` is an important method to make our chart reusable as it allows us to do 3 key things:
-1. We can update our chart with different slices of data without re-rendering our chart.
-2. We can call separate instances of our chart on the same page using different data.
-3. It ensures our chart module is responsive.
+Understanding what `appendSelect` does is fundamental to understanding how reusable chart modules work. It's what programmers call idempotent, which means it's code that's been abstracted so we can give it any selector and any class and check to see whether or not an element is already appended or not. This kind of functionality is powerful and in the case of our d3 chart module, it allows us to do 3 things easily:
+1. Update our chart with different slices of data without re-rendering our chart.
+2. Call separate instances of our chart on the same page using different data (i.e. small multiples)
+3. Helps ensure our chart module is responsive.
 
-## The basic structure of our chart module
-Now that we've covered the key concept behind our appendSelect method, let's go over the basic structure your chart module should have out of the box. First of all, our chart is wrapped in an `export default()` function so we can easily import it into other projects.
+### The basic structure of our chart module
+#### file: `file-1.js`
+Ok, now that we've covered the key concepts behind our appendSelect method, let's go over the basic structure of our chart module (`file-1.js`). First of all, our chart is wrapped in an `export default()` function so we can easily import it into other projects.
 
 Second, our chart has 5 methods by which you can access it/call it.
 1. `render()`

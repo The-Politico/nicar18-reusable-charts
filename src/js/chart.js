@@ -129,6 +129,8 @@ export default () => ({
     const chart = this.render()
       .props(this._props);
 
+    console.log(this._props);
+
     d3.select(this._selection)
       .datum(this._data)
       .call(chart);
