@@ -18,4 +18,13 @@ const data = linearData.map((d) => {
 // It needs a selection string (html element), data and our custom props object.
 myChart.create('#chart', data, {
   // yScale: d3.scaleOrdinal(),
+  parseDate: d3.timeParse('%Y'),
+  xTickFormat: d => `Q1 ${d3.timeFormat('%y')(d)}`,
+  yTickFormat: (d, i, o) => {
+    if (i === o.length - 1) {
+      return `${d3.format('$.0f')(d)}`;
+    }
+    return d;
+  },
+  yTickSteps: d3.range(35, 100, 10),
 });

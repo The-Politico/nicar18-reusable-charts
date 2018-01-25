@@ -1,6 +1,10 @@
 $lineChart-container: '#chart';
 
 #{$lineChart-container} {
+  font-family: helvetica;
+  h3 {
+    text-align: center;
+  }
   width: 100%;
   max-width:600px;
   height: 400px;
@@ -9,6 +13,29 @@ $lineChart-container: '#chart';
   }
   path {
     fill: none;
-    stroke: #000;
+    stroke: #4e79c4;
+    stroke-width: 3px;
+  }
+  .axis {
+    path {
+      display: none;
+    }
+    text {
+      font-size: 13px;
+      fill: grey;
+    }
+    &.x line {
+      display: none;
+    }
+    &.y {
+      text {
+        text-anchor:end;
+        transform:translate(0px,-10px);
+      }
+      line {
+        stroke: lightgrey;
+        stroke-dasharray: 3px 3px;
+      }
+    }
   }
 }

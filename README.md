@@ -17,7 +17,7 @@ Then, visit localhost:3000 in your browser. You should see the page load.
 
 To build the project into production-ready Javascript, run `npm run build`
 
-NOTES:
+### NOTES:
 As long as there is a package.json, it’s a publishable package
 Public facing repo
 Aim for a finished code example and copy and paste from there
@@ -27,6 +27,11 @@ How do you demonstrate reusability?
 - Different data sets: two data sets (time axes vs. ordinal axes)
 - Call update function
 - Small multiples
+
+#TODO
+- bring in a different axis.
+- bring in multiple lines
+- break up code ...
 
 Lecture Notes:
 ## A basic d3 line chart we've all built ... too many times to count.

@@ -17,12 +17,17 @@ export default () => ({
     let props = {
       margins: {
         top: 25,
-        right: 20,
-        left: 40,
+        right: 30,
+        left: 30,
         bottom: 25,
       },
       xScale: d3.scaleTime(),
+      xExtent: null,
+      xTickFormat: null,
       yScale: d3.scaleLinear(),
+      yExtent: null,
+      yTickFormat: null,
+      yTickSteps: null,
     };
 
     function chart(selection) {
@@ -32,26 +37,44 @@ export default () => ({
       // And pass our chart data.
 
         // "this" refers to the selection
+        // bbox is a convenient way to return your element's width and height
         const bbox = this.getBoundingClientRect();
         const { width } = bbox;
         const { height } = bbox;
         const innerWidth = width - props.margins.right - props.margins.left;
         const innerHeight = height - props.margins.top - props.margins.bottom;
 
-        const parseDate = d3.timeParse('%Y');
+        // Calculate the extent (min/max) of our data
+        // for both our x and y axes
+        const xExtent = d3.extent(data, d => d.x);
+        const yExtent = d3.extent(data, d => d.y);
 
+        // If an extent is not provided as a prop, default to the min/max of our data
         const xScale = props.xScale
-          .domain([parseDate('2011'), parseDate('2017')])
+          .domain(props.xExtent === null ? xExtent : props.xExtent)
           .range([0, innerWidth]);
 
         const yScale = props.yScale
-          .domain([30, 100])
-          .range([innerHeight, 0]);
+          .domain(props.yExtent === null ? yExtent : props.yExtent)
+          .range([innerHeight, 0])
+          .nice();
+
+        // Axes
+        const xAxis = d3.axisBottom(xScale)
+          .tickFormat(props.xTickFormat)
+          .tickPadding(0);
+
+        const yAxis = d3.axisLeft(yScale)
+          .tickFormat(props.yTickFormat)
+          .tickSize(-innerWidth - props.margins.left)
+          .tickValues(props.yTickSteps)
+          .tickPadding(0);
 
         const line = d3.line()
           .x(d => xScale(d.x))
           .y(d => yScale(d.y));
 
+        // Now, let's create our svg element using appendSelect!
         // appendSelect will either append an element that doesn't exist yet
         // or select one that already does. This is useful for making this
         // function idempotent. Use it this way:
@@ -66,6 +89,16 @@ export default () => ({
           .appendSelect('g', 'chart')
           .attr('transform', `translate(${props.margins.left}, ${props.margins.top})`);
 
+        g.appendSelect('g', 'y axis')
+          .attr('transform', 'translate(0, 0)')
+          .call(yAxis);
+
+        g.appendSelect('g', 'x axis')
+          .attr('transform', `translate(0,${innerHeight})`)
+          .call(xAxis);
+
+
+        // Add our lines data
         const lines = g.selectAll('path.line')
           .data([data]);
 
