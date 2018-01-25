@@ -29,6 +29,9 @@ export default () => ({
       yTickFormat: null,
       yTickSteps: null,
       colorScale: d3.scaleOrdinal(),
+      xAccessor: d => d.date,
+      yAccessor: d => d.value,
+      labelAccessor: d => d.label,
     };
 
     function chart(selection) {
@@ -45,12 +48,25 @@ export default () => ({
         const innerWidth = width - props.margins.right - props.margins.left;
         const innerHeight = height - props.margins.top - props.margins.bottom;
 
-        // Calculate the extent (min/max) of our data
-        // for both our x and y axes
-        const xExtent = d3.extent(data, d => d.x);
-        const yExtent = d3.extent(data, d => d.y);
 
-        // console.log(data);
+        // Normalize data
+        const normData = data.map(arr => arr.map(d => ({
+          x: props.xAccessor(d),
+          y: props.yAccessor(d),
+          label: props.labelAccessor(d),
+        })));
+
+        // Calculate the extent (min/max) of our data
+        // for both our x and y axes;
+        const xExtent = d3.extent(
+          _.flatten(normData.map(arr => d3.extent(arr, d => d.x))),
+          d => d,
+        );
+        const yExtent = d3.extent(
+          _.flatten(normData.map(arr => d3.extent(arr, d => d.y))),
+          d => d,
+        );
+
 
         // If an extent is not provided as a prop, default to the min/max of our data
         const xScale = props.xScale
@@ -106,7 +122,7 @@ export default () => ({
 
         // Add our lines data
         const lines = g.selectAll('path.line')
-          .data(data);
+          .data(normData);
 
         lines.enter()
           .append('path')

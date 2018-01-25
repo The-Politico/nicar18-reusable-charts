@@ -10,20 +10,13 @@ const parseDate = d3.timeParse('%Y');
 const parseTime = d3.timeParse('%Y%m%d');
 
 // PROCESS OUR SINGLE LINE DATA
-const singleLineData = singleLine[0].map((d) => {
-  return {
-    x: parseDate(d.year),
-    y: d.value,
-  };
-});
 
-console.log(singleLineData)
 
 // This is the initial draw, using our create method.
 // It needs a selection string (html element), data and our custom props object.
-myChart.create('#chart', singleLineData, {
+myChart.create('#chart', singleLine, {
   parseDate: d3.timeParse('%Y'),
-  xTickFormat: d => `Q1 ${d3.timeFormat('%y')(d)}`,
+  // xTickFormat: d => `Q1 ${d3.timeFormat('%y')(d)}`,
   yTickFormat: (d, i, o) => {
     if (i === o.length - 1) {
       return d3.format('$.0f')(d);
@@ -31,6 +24,8 @@ myChart.create('#chart', singleLineData, {
     return d;
   },
   yTickSteps: d3.range(35, 100, 10),
+  xAccessor: d => parseDate(d.year),
+  labelAccessor: () => 'hellz yeah',
 });
 
 
