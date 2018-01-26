@@ -108,13 +108,13 @@ It's coming from `app.js` where we're passing in a prop called `labelAccessor`. 
 
 Why do we need a `labelAccessor` if it isn't in our data? It's because `labelAccessor` is used by our `colorScale` (`lines 74-76` in `file-3.js`) to assign colors to our lines. In this example, we only draw one line, so having a label in our data isn't necessary, which is why we pass in a meaningless string. But in our next example when we draw a multi-line chart, you'll see `labelAccessor` in action.
 
-That said, we should have `labelAccessor` defined in our props object in our chart module (`file-3.js`), as it's a good practice to only overwrite props in your `create()` method that already exist as defaults in your chart module. So let's go back to `file-3.js` and uncomment `labelAccessor: d => d.cat` in our `props` object. Save the file and look at your console again.
+That said, we should have `labelAccessor` defined in our props object in our chart module (`file-3.js`), as it's good practice to only overwrite props in your `create()` method that already exist as defaults in your chart module. So let's go back to `file-3.js` and uncomment `labelAccessor: d => d.cat` in our `props` object. Save the file and look at your console again.
 
 What is the value of our `labelAccessor` in our `processedData` array? It's still the long string and not our default `labelAccessor` we just uncommented. And that's because any props you pass through in the creation of your chart overwrite default props set in your chart module thanks to that get-setter function at the bottom of `render()` we talked about earlier.
 
 The significance of all this is we can now pass our chart module any data set regardless of how our variables are named and then rename them using our data accessors `xAccessor`, `yAccessor`, and `labelAccessor`.
 
-This makes our chart code reusable. Because instead of calling `d.year` or `d.value`, like we did in `file-2.js`, we can now simply call `d.x`, `d.y` and `d.label`. (In `file-2.js`, we hard coded our stroke color, so didn't even have a colorScale).
+This makes our chart code reusable. Because instead of calling `d.year` or `d.value`, like we did in `file-2.js`, we can now simply call `d.x`, `d.y` and `d.label`. (In `file-2.js`, we hard coded our stroke color, so didn't use `d.label` or even have a colorScale).
 
 Now, let's test the reusability of our chart with a new data set and draw a multi-line chart.
 
@@ -124,15 +124,15 @@ First pop over to our `index.html` and uncomment our second div, `multiple-line-
 
 Next in `app.js` comment out `import chart from './file-3';` and uncomment `import chart from './file-4';`
 
-Then uncomment the code under `MULTI-LINE CHART` (`lines 35-39` in `app.js`). Save `app.js` and what do you see in your browser?
+Then uncomment the code under `MULTI-LINE CHART` (`lines 42-46` in `app.js`). Save `app.js` and what do you see in your browser?
 
 🎉 Two line charts 🎉
 
-And if you uncomment `line 43` in `app.js`, `myMultiLineChart` will be fully responsive too.
+And if you uncomment `line 52` in `app.js`, `myMultiLineChart` will be fully responsive too.
 
 ### Customize our chart, AKA the power of props
-#### files: `app.js` + `file-4.js`
-At this point, everything is gravy. But to better understand the role of props in our chart modules, let's comment out `import chart from './file-4';` and uncomment `import chart from './file-5';` and `lines 20-29` in `app.js` where we create our singleLine chart. Save `app.js`. What do you see?
+#### files: `app.js` + `file-5.js`
+At this point, everything is gravy. But to better understand the role of props in our chart modules, let's comment out `import chart from './file-4';` and uncomment `import chart from './file-5';` and `lines 23-30` in `app.js` where we create our singleLine chart. Save `app.js`. What do you see?
 
 Our first chart now has a nicer formatted x and y axis, plus the steps on our yAxis are better bound by our data set.
 
@@ -143,11 +143,17 @@ Pop open `file-5.js` and check out our props. You can see we've passed in `xTick
 Props in our chart modules open up a whole world of customization (including passing in different scales or domains, ranges, etc.)
 
 #### Homework
-To see a more extensive use of props, bring in `chart.js` in `app.js` and uncomment `const parseYear = d3.timeParse('%Y');` and change your `xAccessor` in `myChart` to `xAccessor: d => parseYear(d.year)`. Make sure to add the same `xAccessor` to `myMultiLineChart`.
+#### files: `app.js` + `chart.js`
+To see a more extensive use of props, bring in `chart.js` (comment out `file-5.js`) in `app.js` and uncomment `const parseYear = d3.timeParse('%Y');`. Change your `xAccessor` in `myChart` to `xAccessor: d => parseYear(d.year)`. Make sure to add the same `xAccessor` to `myMultiLineChart`.
 
-### Update our data
-The last thing we want to show you is how to pass in new data or — update our chart with data.
+Other things you should try: pass in a new data set with different field names than `year` and `value`. Just make sure it's an array of arrays of objects :)
 
-### Resources
-- https://bost.ocks.org/mike/chart/
-- Say hi on twitter [Jeremy](https://twitter.com/Jeremy_CF_Lin) and [Sarah](https://twitter.com/sfrostenson)
+### Update our chart with new data
+#### file: `app.js`
+The last thing we want to show you is how to quickly pass in new data or — update our chart with data.
+
+Let's go ahead and comment out our props in `myChart` except for `labelAccessor` and then uncomment our `setTimeout` `lines 34-37` in `app.js`.
+
+Wait 5 seconds and what happened to our top chart? The line changed! We passed our `myChart` variable a new data set wrapped in a `setTimeout` function. It's easy peasy to pass our chart new data the possibilities are endless.
+
+Thanks for hanging out with us today and hit us up with any questions you might have on twitter [Jeremy](https://twitter.com/Jeremy_CF_Lin) and [Sarah](https://twitter.com/sfrostenson). Also give this a read, as it's the original guide to reusable d3 charts: https://bost.ocks.org/mike/chart/

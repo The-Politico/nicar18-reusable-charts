@@ -3,11 +3,12 @@ import _ from 'lodash';
 import d3 from './d3';
 import singleLine from '../data/single-line.json';
 import multipleLine from '../data/multiple-line.json';
-// import chart from './file-1';
+import updateLine from '../data/update.json';
+import chart from './file-1';
 // import chart from './file-2';
 // import chart from './file-3';
 // import chart from './file-4';
-import chart from './file-5';
+// import chart from './file-5';
 
 // import chart from './chart';
 // const parseYear = d3.timeParse('%Y');
@@ -26,11 +27,14 @@ myChart.create('#single-line-chart', singleLine, {
   //   }
   //   return d;
   // },
-  // yTickSteps: d3.range(35, 100, 10),
-  // xAccessor: d => d.year,
-  // yAccessor: d => d.value,
+  // yTickSteps: d3.range(20, 50, 10),
   labelAccessor: () => 'if this does not exist in your data, it can be anything!',
 });
+
+// setTimeout(() => {
+//   console.log('update');
+//   myChart.update(updateLine);
+// }, 5000);
 
 
 // MULTI-LINE CHART
