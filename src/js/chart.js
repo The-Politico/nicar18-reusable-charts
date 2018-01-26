@@ -48,7 +48,6 @@ export default () => ({
         const innerWidth = width - props.margins.right - props.margins.left;
         const innerHeight = height - props.margins.top - props.margins.bottom;
 
-
         // Normalize data
         const normData = data.map(arr => arr.map(d => ({
           x: props.xAccessor(d),
@@ -67,7 +66,6 @@ export default () => ({
           d => d,
         );
 
-
         // If an extent is not provided as a prop, default to the min/max of our data
         const xScale = props.xScale
           .domain(props.xExtent === null ? xExtent : props.xExtent)
@@ -79,7 +77,7 @@ export default () => ({
           .nice();
 
         const colorScale = props.colorScale
-          .domain(data.map(c => c.z))
+          .domain(_.flatten(normData.map(arr => arr.map(d => d.label))))
           .range(d3.schemeCategory10);
 
         // Axes
@@ -129,7 +127,7 @@ export default () => ({
           .attr('class', 'line')
           .merge(lines)
           .attr('d', line)
-          .style('stroke', d => colorScale(d.z));
+          .style('stroke', (arr, i) => colorScale((arr[i].label)));
       });
     }
 

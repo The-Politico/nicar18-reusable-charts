@@ -24,20 +24,16 @@ Aim for a finished code example and copy and paste from there
 
 How do you demonstrate reusability?
 - Pass in props
-- Different data sets: two data sets (time axes vs. ordinal axes)
 - Call update function
-- Small multiples
+- Small multiples (do we have a data file structured already ... university rankings)
 
 - internalize where the logic goes
 - do you expect normalized x/y properties
 - what about accessors for accessing data and passing it in
 
-- concept of idempotence ... we make them so you can call them anytime, anywhere.
-- predictable
-
-
 #TODO
-- bring in multiple lines
+- real data
+- update function
 - break up code ... [building chart - render a line, props, putting it all together]
 
 Lecture Notes:

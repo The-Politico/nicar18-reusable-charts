@@ -1,4 +1,4 @@
-$lineChart-container: '#chart';
+$lineChart-container: '#single-line-chart, #multiple-line-chart';
 
 #{$lineChart-container} {
   font-family: helvetica;
@@ -13,7 +13,6 @@ $lineChart-container: '#chart';
   }
   path {
     fill: none;
-    stroke: #4e79c4;
     stroke-width: 3px;
   }
   .axis {

@@ -6,45 +6,25 @@ import singleLine from '../data/single-line.json';
 import multipleLine from '../data/multiple-line.json';
 
 const myChart = new chart();
-const parseDate = d3.timeParse('%Y');
+const parseYear = d3.timeParse('%Y');
 const parseTime = d3.timeParse('%Y%m%d');
-
-// PROCESS OUR SINGLE LINE DATA
-
 
 // This is the initial draw, using our create method.
 // It needs a selection string (html element), data and our custom props object.
-myChart.create('#chart', singleLine, {
-  parseDate: d3.timeParse('%Y'),
+myChart.create('#single-line-chart', singleLine, {
   // xTickFormat: d => `Q1 ${d3.timeFormat('%y')(d)}`,
-  yTickFormat: (d, i, o) => {
-    if (i === o.length - 1) {
-      return d3.format('$.0f')(d);
-    }
-    return d;
-  },
-  yTickSteps: d3.range(35, 100, 10),
-  xAccessor: d => parseDate(d.year),
-  labelAccessor: () => 'hellz yeah',
+  // yTickFormat: (d, i, o) => {
+  //   if (i === o.length - 1) {
+  //     return d3.format('$.0f')(d);
+  //   }
+  //   return d;
+  // },
+  // yTickSteps: d3.range(35, 100, 10),
+  xAccessor: d => parseYear(d.year),
+  labelAccessor: () => 'if this does not exist in your data, it can be anything!',
 });
 
-
-// PROCESS OUR MULTILINE DATA
-// create an array of our dataValue keys
-const dataKeys = d3.keys(multipleLine[0]).filter(key => key !== 'date');
-
-// map our dataValue keys to our data
-const multipleLineData = dataKeys.map(key => multipleLine.map(val => ({
-  x: parseTime(val.date),
-  y: val[key],
-  z: key,
-})));
-
-// console.log(multipleLineData)
-
-// concat our arrays of objects into one array of objects
-// const mergedMultipleLineData = [].concat(...multipleLineData);
-
-// myChart.create('#chart', multipleLineData, {
-//   xTickFormat: d => d3.timeFormat('%b')(d),
-// });
+myChart.create('#multiple-line-chart', multipleLine, {
+  xAccessor: d => parseYear(d.year),
+  labelAccessor: d => d.cat,
+});
