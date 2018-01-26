@@ -142,12 +142,6 @@ Pop open `file-5.js` and check out our props. You can see we've passed in `xTick
 
 Props in our chart modules open up a whole world of customization (including passing in different scales or domains, ranges, etc.)
 
-#### Homework
-#### files: `app.js` + `chart.js`
-To see a more extensive use of props, bring in `chart.js` (comment out `file-5.js`) in `app.js` and uncomment `const parseYear = d3.timeParse('%Y');`. Change your `xAccessor` in `myChart` to `xAccessor: d => parseYear(d.year)`. Make sure to add the same `xAccessor` to `myMultiLineChart`.
-
-Other things you should try: pass in a new data set with different field names than `year` and `value`. Just make sure it's an array of arrays of objects :)
-
 ### Update our chart with new data
 #### file: `app.js`
 The last thing we want to show you is how to quickly pass in new data or — update our chart with data.
@@ -155,5 +149,16 @@ The last thing we want to show you is how to quickly pass in new data or — upd
 Let's go ahead and comment out our props in `myChart` except for `labelAccessor` and then uncomment our `setTimeout` `lines 34-37` in `app.js`.
 
 Wait 5 seconds and what happened to our top chart? The line changed! We passed our `myChart` variable a new data set wrapped in a `setTimeout` function. It's easy peasy to pass our chart new data the possibilities are endless.
+
+### Next steps
+#### files: `app.js` + `chart.js`
+To see a more extensive use of props, bring in `chart.js` (comment out `file-5.js`) in `app.js` and uncomment `const parseYear = d3.timeParse('%Y');`. Change your `xAccessor` in `myChart` to `xAccessor: d => parseYear(d.year)`. Make sure to add the same `xAccessor` to `myMultiLineChart`.
+
+Other things you should try: pass in a new data set with different field names than `year` and `value`. Just make sure it's an array of arrays of objects as that's the data format our chart module expects :)
+
+All our code is available on Github here: https://github.com/The-Politico/nicar18-reusable-charts
+
+And if you want to start hacking on a new project to build a chart module from scratch check out this bundler/dev environment:
+https://github.com/The-Politico/simple-bundler
 
 Thanks for hanging out with us today and hit us up with any questions you might have on twitter [Jeremy](https://twitter.com/Jeremy_CF_Lin) and [Sarah](https://twitter.com/sfrostenson). Also give this a read, as it's the original guide to reusable d3 charts: https://bost.ocks.org/mike/chart/
