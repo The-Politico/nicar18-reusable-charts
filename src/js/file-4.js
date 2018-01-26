@@ -1,4 +1,4 @@
-// Import lodash + our custom d3 module using ES6
+// Import lodash + our custom d3 module
 import _ from 'lodash';
 import d3 from './d3';
 
@@ -7,28 +7,13 @@ import d3 from './d3';
 export default () => ({
 
   // Here's where the bulk of our chart code lives.
-  // In our render function, we pass in customizable properties specific to our chart
-  // and we also create a chart function where we pass in the html element that contains our chart
-  // This structure builds upon concepts from Mike Bostock discussed here: https://bost.ocks.org/mike/chart/
+  // In our render function, we pass in customizable properties specific to our chart.
+  // We also create an inner chart function where we pass in a HTML element and data for our chart.
   render() {
     // This is our props object.
     // We set default chart properties in this object that users can overwrite
-    // by passing a props object to their chart creator (this will be in our index file).
+    // with a props object when they call their chart (We will do this in app.js).
     let props = {
-      margins: {
-        top: 25,
-        right: 30,
-        left: 30,
-        bottom: 25,
-      },
-      xScale: d3.scaleTime(),
-      xExtent: null,
-      xTickFormat: null,
-      yScale: d3.scaleLinear(),
-      yExtent: null,
-      yTickFormat: null,
-      yTickSteps: null,
-      colorScale: d3.scaleOrdinal(),
       xAccessor: d => d.year,
       yAccessor: d => d.value,
       labelAccessor: d => d.cat,
@@ -36,17 +21,24 @@ export default () => ({
 
     function chart(selection) {
       selection.each(function (data) { // eslint-disable-line func-names
-      // This is the inner chart function where we actually draw our chart.
-      // Here we'll set up our chart width and height
-      // And pass our chart data.
+        // This is the inner chart function where we actually draw our chart.
+        // Here we'll set up our chart width and height
+        // And pass our chart data.
 
         // "this" refers to the selection
         // bbox is a convenient way to return your element's width and height
         const bbox = this.getBoundingClientRect();
         const { width } = bbox;
         const { height } = bbox;
-        const innerWidth = width - props.margins.right - props.margins.left;
-        const innerHeight = height - props.margins.top - props.margins.bottom;
+        const margins = {
+          top: 25,
+          right: 30,
+          left: 30,
+          bottom: 25,
+        };
+        const innerWidth = width - margins.right - margins.left;
+        const innerHeight = height - margins.top - margins.bottom;
+        const parseYear = d3.timeParse('%Y');
 
         // Normalize data
         const normData = data.map(arr => arr.map(d => ({
@@ -58,7 +50,7 @@ export default () => ({
         // Calculate the extent (min/max) of our data
         // for both our x and y axes;
         const xExtent = d3.extent(
-          _.flatten(normData.map(arr => d3.extent(arr, d => d.x))),
+          _.flatten(normData.map(arr => d3.extent(arr, d => parseYear(d.x)))),
           d => d,
         );
         const yExtent = d3.extent(
@@ -67,32 +59,29 @@ export default () => ({
         );
 
         // If an extent is not provided as a prop, default to the min/max of our data
-        const xScale = props.xScale
-          .domain(props.xExtent === null ? xExtent : props.xExtent)
+        const xScale = d3.scaleTime()
+          .domain(xExtent)
           .range([0, innerWidth]);
 
-        const yScale = props.yScale
-          .domain(props.yExtent === null ? yExtent : props.yExtent)
+        const yScale = d3.scaleLinear()
+          .domain(yExtent)
           .range([innerHeight, 0])
           .nice();
 
-        const colorScale = props.colorScale
+        const colorScale = d3.scaleOrdinal()
           .domain(_.flatten(normData.map(arr => arr.map(d => d.label))))
           .range(d3.schemeCategory10);
 
         // Axes
         const xAxis = d3.axisBottom(xScale)
-          .tickFormat(props.xTickFormat)
           .tickPadding(0);
 
         const yAxis = d3.axisLeft(yScale)
-          .tickFormat(props.yTickFormat)
-          .tickSize(-innerWidth - props.margins.left)
-          .tickValues(props.yTickSteps)
+          .tickSize(-innerWidth - margins.left)
           .tickPadding(0);
 
         const line = d3.line()
-          .x(d => xScale(d.x))
+          .x(d => xScale(parseYear(d.x)))
           .y(d => yScale(d.y));
 
         // Now, let's create our svg element using appendSelect!
@@ -108,7 +97,7 @@ export default () => ({
           .attr('width', width)
           .attr('height', height)
           .appendSelect('g', 'chart')
-          .attr('transform', `translate(${props.margins.left}, ${props.margins.top})`);
+          .attr('transform', `translate(${margins.left}, ${margins.top})`);
 
         g.appendSelect('g', 'y axis')
           .attr('transform', 'translate(0, 0)')
@@ -133,7 +122,8 @@ export default () => ({
 
     // Right outside of chart function is an important piece of boilerplate code.
     // It's known as a getter-setter.
-    // What that means, in our case, is it merges default properties with user provided properties.
+    // What that means, in our case, is it merges default properties with
+    // user provided properties.
     chart.props = (obj) => {
       if (!obj) return props;
       props = Object.assign(props, obj);
@@ -157,8 +147,8 @@ export default () => ({
 
   // We use the create method to initially draw our chart
   // Unlike the update and resize methods, this method expects our actual html selector
-  // (which is needed by our chart function (inside render) to actually draw the chart)
-  // We also pass in our data and custom props here.
+  // (which is needed by our chart function to actually draw the chart)
+  // We also pass in our data and custom props object here.
   create(selection, data, props) {
     this._selection = selection;
     this._data = data;

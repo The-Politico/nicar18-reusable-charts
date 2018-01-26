@@ -1,4 +1,4 @@
-// Import our custom d3 module using ES6
+// Import our custom d3 module
 import d3 from './d3';
 
 // Here we create our own chart module that can be exported
@@ -6,17 +6,16 @@ import d3 from './d3';
 export default () => ({
 
   // Here's where the bulk of our chart code lives.
-  // In our render function, we pass in customizable properties specific to our chart
-  // and we also create a chart function where we pass in the html element that contains our chart
-  // This structure builds upon concepts from Mike Bostock discussed here: https://bost.ocks.org/mike/chart/
+  // In our render function, we pass in customizable properties specific to our chart.
+  // We also create an inner chart function where we pass in a HTML element and data for our chart.
   render() {
     // This is our props object.
     // We set default chart properties in this object that users can overwrite
-    // by passing a props object to their chart creator (this will be in our index file).
+    // with a props object when they call their chart (We will do this in app.js).
     let props = {};
 
     function chart(selection) {
-      selection.each(function (data) { // eslint-disable-line func-names
+      selection.each((data) => {
       // This is the inner chart function where we actually draw our chart.
       // Here we'll set up our chart width and height
       // And pass our chart data.
@@ -25,11 +24,12 @@ export default () => ({
 
     // Right outside of chart function is an important piece of boilerplate code.
     // It's known as a getter-setter.
-    // What that means, in our case, is it merges default properties with user provided properties.
+    // What that means, in our case, is it merges default properties with
+    // user provided properties.
     chart.props = (obj) => {
       if (!obj) return props;
       props = Object.assign(props, obj);
-      // console.log(props);
+      console.log(props);
       return chart;
     };
     // Here's where we return our chart function
@@ -42,8 +42,6 @@ export default () => ({
     const chart = this.render()
       .props(this._props);
 
-    console.log(this._props);
-
     d3.select(this._selection)
       .datum(this._data)
       .call(chart);
@@ -51,8 +49,8 @@ export default () => ({
 
   // We use the create method to initially draw our chart
   // Unlike the update and resize methods, this method expects our actual html selector
-  // (which is needed by our chart function (inside render) to actually draw the chart)
-  // We also pass in our data and custom props here.
+  // (which is needed by our chart function to actually draw the chart)
+  // We also pass in our data and custom props object here.
   create(selection, data, props) {
     this._selection = selection;
     this._data = data;
