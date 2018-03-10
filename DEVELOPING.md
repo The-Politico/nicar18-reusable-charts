@@ -1,6 +1,19 @@
 # Writing reusable chart modules in D3
+
+### Why are we here:
+Because we're tired of building the same line chart again and again! Or bar chart. Or scatterplot, you know. You get the picture.
+
+To show you some examples of how we've used our reusable chart modules in the wild, here's links to some of our projects.
+[Elections results](https://www.politico.com/interactives/elections/2017/alabama/special-election/dec-12/)
+[Polling pages](https://www.politico.com/interactives/2017/politico-morning-consult-poll/)
+[Balance of power charts](https://www.politico.com/interactives/2018/women-rule-candidate-tracker-primary-2018/)
+
+To be clear, what we're talking about today isn't new. Mike Bostock first posited the idea [back in 2012](https://bost.ocks.org/mike/chart/) and what we've developed at POLITICO is just our own convention. It isn't set in stone, so you should feel free to experiment and build your own.
+
 ### What we're going to build:
 A reusable, responsive line chart module that can draw one line or many, many lines.
+
+One *important caveat*, we do use future JavaScript syntax. If you haven't played around with it yet, it can look a bit inscrutable, so here's a good [walk-through](https://codeburst.io/es6-tutorial-for-beginners-5f3c4e7960be) to get you up to speed. And for the purposes of today, just check out these [basics](https://the-politico.github.io/nicar2018_reactive-frameworks/f8e741c24770ad365e726f3d8e9b4aa3.html).
 
 ### Introducing idempotence and our friend `appendSelect`
 #### file: `d3.js`
